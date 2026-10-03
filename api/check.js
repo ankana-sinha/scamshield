@@ -63,11 +63,10 @@ Use simple language suitable for an elderly Indian user.`
 
     return res.status(200).json({ result });
 
-  } catch (error) {
-    console.error(error);
+} catch (error) {
+  console.error("SCAMSHIELD ERROR:", error);
 
-    return res.status(500).json({
-      error: "ScamShield could not complete the check."
-    });
-  }
+  return res.status(500).json({
+    error: error?.message || "ScamShield could not complete the check."
+  });
 }
