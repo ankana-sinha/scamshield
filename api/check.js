@@ -48,11 +48,14 @@ Use simple language suitable for an elderly Indian user.`
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || "AI request failed"
-      });
-    }
+   if (!response.ok) {
+  console.error("OPENAI ERROR:", response.status, data);
+
+  return res.status(500).json({
+    error: "OpenAI request failed",
+    details: data?.error?.message || "Unknown OpenAI error"
+  });
+}
 
     const result =
       data?.choices?.[0]?.message?.content ||
