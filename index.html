@@ -740,6 +740,116 @@ a:focus-visible, button:focus-visible {
   </div>
 </section>
 
+  <!-- ScamShield Live Checker -->
+<section class="alt" id="checker">
+  <div class="wrap">
+    <div class="section-eyebrow">Try ScamShield</div>
+
+    <h2>Not sure if a message is a scam?</h2>
+
+    <p>
+      Paste the suspicious SMS, WhatsApp message, email, or payment request below.
+      ScamShield will explain the warning signs in simple language and tell you what to do next.
+    </p>
+
+    <div style="max-width:760px;margin:32px auto 0;">
+      <textarea
+        id="scam-input"
+        placeholder="Paste the suspicious message here..."
+        style="width:100%;min-height:170px;padding:18px;border:1px solid #d9e1dc;border-radius:12px;font:inherit;resize:vertical;box-sizing:border-box;"
+      ></textarea>
+
+      <button
+        id="scam-check-btn"
+        class="cta-btn"
+        type="button"
+        style="margin-top:14px;border:0;cursor:pointer;"
+      >
+        Check with ScamShield
+      </button>
+
+      <div
+        id="scam-loading"
+        style="display:none;margin-top:20px;padding:16px;border-radius:10px;background:#f1f7f3;"
+      >
+        ScamShield is checking the message...
+      </div>
+
+      <div
+        id="scam-result"
+        style="display:none;margin-top:20px;padding:22px;border-radius:12px;background:#ffffff;border:1px solid #d9e1dc;"
+      ></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  const input = document.getElementById("scam-input");
+  const button = document.getElementById("scam-check-btn");
+  const loading = document.getElementById("scam-loading");
+  const result = document.getElementById("scam-result");
+
+  button.addEventListener("click", async function () {
+    const message = input.value.trim();
+
+    if (!message) {
+      result.style.display = "block";
+      result.innerHTML =
+        "<strong>Please paste the message first.</strong>";
+      return;
+    }
+
+    button.disabled = true;
+    button.style.opacity = "0.6";
+    loading.style.display = "block";
+    result.style.display = "none";
+
+    try {
+      const response = await fetch("/api/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      result.style.display = "block";
+      result.innerHTML = `
+        <div style="white-space:pre-wrap;line-height:1.7;">
+          ${escapeHtml(data.result)}
+        </div>
+      `;
+    } catch (error) {
+      result.style.display = "block";
+      result.innerHTML = `
+        <strong>ScamShield couldn't complete the check.</strong>
+        <p style="margin-top:8px;">
+          Please try again in a moment.
+        </p>
+      `;
+      console.error(error);
+    } finally {
+      button.disabled = false;
+      button.style.opacity = "1";
+      loading.style.display = "none";
+    }
+  });
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+})();
+</script>
+
 <!-- 6. Safety & Trust -->
 <section class="alt">
   <div class="wrap">
