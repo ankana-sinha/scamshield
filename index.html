@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScamShield — Financial Safety for Your Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #1a2332;
+  --ink-mid: #3d4f63;
+  --ink-light: #5a6b7d;
+  --surface: #ffffff;
+  --surface-alt: #f5f7fa;
+  --surface-warm: #fafbfc;
+  --accent: #1a6b4e;
+  --accent-hover: #145a40;
+  --accent-light: #e6f4ed;
+  --accent-subtle: #f0f9f4;
+  --alert: #b8352a;
+  --alert-light: #fdf0ef;
+  --alert-bg: #fef7f6;
+  --border: #e0e6ec;
+  --border-light: #edf0f4;
+  --shadow-sm: 0 1px 3px rgba(26,35,50,0.04), 0 1px 2px rgba(26,35,50,0.06);
+  --shadow-md: 0 4px 16px rgba(26,35,50,0.06), 0 1px 4px rgba(26,35,50,0.04);
+  --shadow-lg: 0 8px 32px rgba(26,35,50,0.08), 0 2px 8px rgba(26,35,50,0.04);
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+  --radius: 8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.72;
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 100;
+  padding: 16px 0;
+}
+nav .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.logo span { color: var(--accent); }
+.nav-cta {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--accent);
+  border: none;
+  padding: 11px 24px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+.nav-cta:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Sections ── */
+section { padding: 96px 0; }
+section.alt { background: var(--surface-alt); }
+
+.section-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: 2.1rem;
+  font-weight: 600;
+  line-height: 1.22;
+  color: var(--ink);
+  margin-bottom: 18px;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+p {
+  margin-bottom: 16px;
+  color: var(--ink-mid);
+}
+p:last-child { margin-bottom: 0; }
+
+/* ── Hero ── */
+.hero {
+  padding: 88px 0 96px;
+  background: linear-gradient(180deg, var(--surface-warm) 0%, var(--surface) 100%);
+}
+
+.hero-tagline {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 6px 14px 6px 10px;
+  background: var(--accent-light);
+  border-radius: 20px;
+}
+.hero-tagline svg {
+  flex-shrink: 0;
+}
+
+h1 .hero-highlight {
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  line-height: 1.65;
+  color: var(--ink-mid);
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.cta-btn {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--accent);
+  padding: 18px 40px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: var(--shadow-md);
+}
+.cta-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+.cta-btn:active {
+  transform: translateY(0);
+}
+
+.cta-note {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+}
+
+.hero-scenario {
+  border-left: 3px solid var(--alert);
+  padding: 24px 28px;
+  background: var(--alert-bg);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  max-width: 580px;
+}
+.hero-scenario p {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 0;
+}
+.hero-scenario strong {
+  font-style: normal;
+  color: var(--alert);
+}
+.scenario-caption {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  margin-top: 12px;
+  font-style: normal;
+}
+
+/* ── Problem ── */
+.problem-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.stat-block {
+  text-align: left;
+}
+.stat-number {
+  font-family: var(--serif);
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--alert);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-unit {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-light);
+  margin-top: 6px;
+}
+.problem-text p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+/* ── How it Works ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 44px;
+}
+.step {
+  position: relative;
+  padding: 28px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+.step h3 { font-size: 1.05rem; }
+.step p { font-size: 0.92rem; color: var(--ink-mid); }
+
+/* ── Features ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 40px;
+}
+.feature {
+  padding: 24px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+}
+.feature-icon.phone { background: #eef2ff; color: #4f46e5; }
+.feature-icon.upi { background: #fef3c7; color: #d97706; }
+.feature-icon.prize { background: #fce7f3; color: #db2777; }
+.feature-icon.link { background: #e0f2fe; color: #0284c7; }
+.feature h3 {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.feature p { font-size: 0.92rem; }
+
+/* ── Example Scam Card ── */
+.scam-demo-frame {
+  max-width: 440px;
+  margin: 44px auto 0;
+}
+.scam-demo-bar {
+  background: var(--ink);
+  border-radius: 12px 12px 0 0;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scam-demo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+}
+.scam-demo-title {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+.scam-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.scam-message {
+  padding: 24px 24px 20px;
+  background: var(--alert-bg);
+  border-bottom: 1px solid var(--border);
+}
+.scam-message-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--alert);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scam-message-text {
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.65;
+  font-style: italic;
+}
+.scam-analysis {
+  padding: 22px 24px;
+}
+.scam-analysis-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.flag-list {
+  list-style: none;
+  margin-bottom: 16px;
+}
+.flag-list li {
+  font-size: 0.85rem;
+  color: var(--ink-mid);
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.55;
+}
+.flag-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--alert);
+}
+.safe-step {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 14px 16px;
+  background: var(--accent-light);
+  border-radius: 6px;
+  line-height: 1.55;
+}
+
+/* ── Trust ── */
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  margin-top: 28px;
+}
+.trust-item {
+  padding: 14px 0;
+  padding-left: 28px;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  border-bottom: 1px solid var(--border-light);
+}
+.trust-item::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+}
+.trust-item::after {
+  content: '\2715';
+  position: absolute;
+  left: 5px;
+  top: 17px;
+  font-size: 0.5rem;
+  color: var(--ink-light);
+}
+
+/* ── Family Value ── */
+.family-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+.family-card {
+  padding: 32px 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.family-card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.family-card h3 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+.family-card p { font-size: 0.92rem; }
+
+/* ── Final CTA ── */
+.final-cta {
+  text-align: center;
+  padding: 112px 0;
+  background: linear-gradient(180deg, var(--surface-alt) 0%, var(--accent-subtle) 100%);
+}
+.final-cta h2 {
+  margin-bottom: 16px;
+  font-size: 2.2rem;
+}
+.final-cta p {
+  margin-bottom: 36px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.05rem;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 36px 0;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .problem-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .stat-block {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .stat-unit { display: inline; margin-top: 0; margin-left: 4px; }
+  .trust-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .wrap { padding: 0 20px; }
+  section { padding: 72px 0; }
+  h1 { font-size: 2.1rem; }
+  h2 { font-size: 1.6rem; }
+  .hero { padding: 64px 0 72px; }
+  .hero-sub { font-size: 1.05rem; }
+  .hero-cta-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .cta-btn { padding: 16px 32px; font-size: 1rem; width: 100%; text-align: center; }
+  .hero-scenario { padding: 20px 22px; }
+  .hero-scenario p { font-size: 1rem; }
+  .stat-number { font-size: 2.6rem; }
+  .steps { grid-template-columns: 1fr; gap: 16px; }
+  .step { padding: 24px 20px; }
+  .features-grid { grid-template-columns: 1fr; gap: 16px; }
+  .family-grid { grid-template-columns: 1fr; gap: 16px; }
+  .family-card { padding: 24px 20px; }
+  .scam-demo-frame { margin: 32px -4px 0; }
+  .final-cta { padding: 80px 0; }
+  .final-cta h2 { font-size: 1.7rem; }
+  .nav-cta { padding: 10px 18px; font-size: 0.82rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cta-btn:hover { transform: none; }
+}
+
+/* Focus states for accessibility */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo">Scam<span>Shield</span></a>
+    <a href="#cta" class="nav-cta">Get early access</a>
+  </div>
+</nav>
+
+<!-- 1. Hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tagline">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2 14.5h12L8 1.5z" stroke="#1a6b4e" stroke-width="1.5" fill="#e6f4ed"/><line x1="8" y1="6" x2="8" y2="9.5" stroke="#1a6b4e" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.8" fill="#1a6b4e"/></svg>
+      AI-powered financial safety for families
+    </div>
+    <h1>Help your parents <span class="hero-highlight">pause before they act</span> on a scam</h1>
+    <p class="hero-sub">
+      ScamShield is an AI assistant that helps elderly Indians assess suspicious calls, messages, and payment requests — in simple language — before they share information or make a payment.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#cta" class="cta-btn">Join the early access list</a>
+      <span class="cta-note">Free to try. No bank access required.</span>
+    </div>
+
+    <div class="hero-scenario">
+      <p>
+        Your bank calls. Your KYC is "about to expire." They ask you to share an OTP. You're not sure if it's real. But in those few seconds, <strong>you feel pressured to act.</strong>
+      </p>
+      <div class="scenario-caption">This is the moment ScamShield is built for.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Problem -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-eyebrow">The problem</div>
+    <h2>Scams don't target ignorance. They target the moment.</h2>
+    <div class="problem-content">
+      <div class="stat-block">
+        <div class="stat-number">₹1,750 Cr+</div>
+        <span class="stat-unit">lost to cyber fraud in four months of 2024</span>
+      </div>
+      <div class="problem-text">
+        <p>Elderly citizens are disproportionately targeted. Scammers use urgency, authority, and fear — a fake bank call, a threatening SMS, a convincing WhatsApp forward — to pressure people into acting before they can think.</p>
+        <p>The problem isn't that people don't know about scams. It's that scams are designed to bypass careful thinking entirely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. How It Works -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">How it works</div>
+    <h2>Three steps to a safer decision</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Describe what happened</h3>
+        <p>Tell ScamShield about a suspicious call, message, link, or payment request — in your own words.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Get a plain-language breakdown</h3>
+        <p>ScamShield identifies common red flags and explains what's being asked of you, without jargon.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>See your safe next steps</h3>
+        <p>Clear actions: what to do, what not to share, and where to report if needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Key Features -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-eyebrow">What ScamShield helps with</div>
+    <h2>Built for the scams your family actually faces</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-icon phone">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="14" x2="11" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <h3>Fake KYC and bank calls</h3>
+        <p>"Your account will be blocked" — ScamShield helps you recognise this pressure tactic and verify before acting.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon upi">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 8h14" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <h3>UPI payment requests</h3>
+        <p>Unexpected collect requests from unknown numbers. ScamShield flags the warning signs.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon prize">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <h3>Lottery and prize scams</h3>
+        <p>"You've won ₹10 lakhs!" — if you never entered, ScamShield explains why this is a red flag.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon link">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7.5 10.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M10 11.5l1.5-1.5a2.5 2.5 0 000-3.5v0a2.5 2.5 0 00-3.5 0L6.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 6.5L6.5 8a2.5 2.5 0 000 3.5v0a2.5 2.5 0 003.5 0L11.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <h3>Phishing links and messages</h3>
+        <p>Suspicious links in SMS or WhatsApp that mimic banks, government sites, or delivery services.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Example Scam -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">See it in action</div>
+    <h2>How ScamShield reads a suspicious message</h2>
+    <p>Here's how ScamShield would break down a common scam attempt:</p>
+    <div class="scam-demo-frame">
+      <div class="scam-demo-bar">
+        <span class="scam-demo-dot"></span>
+        <span class="scam-demo-dot"></span>
+        <span class="scam-demo-dot"></span>
+        <span class="scam-demo-title">ScamShield Analysis</span>
+      </div>
+      <div class="scam-card">
+        <div class="scam-message">
+          <div class="scam-message-label">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#b8352a" stroke-width="1.5"/><line x1="6" y1="3.5" x2="6" y2="6.5" stroke="#b8352a" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="8.5" r="0.7" fill="#b8352a"/></svg>
+            Suspicious message received
+          </div>
+          <p class="scam-message-text">
+            "Dear Customer, your SBI account KYC has expired. Your account will be blocked within 24 hours. Click here to update immediately: http://sbi-kyc-update.in/verify. Reply with OTP sent to your mobile."
+          </p>
+        </div>
+        <div class="scam-analysis">
+          <div class="scam-analysis-label">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l5 10H1L6 1z" fill="none" stroke="#1a6b4e" stroke-width="1.3"/><line x1="6" y1="4.5" x2="6" y2="7" stroke="#1a6b4e" stroke-width="1.3" stroke-linecap="round"/><circle cx="6" cy="9" r="0.6" fill="#1a6b4e"/></svg>
+            ScamShield analysis
+          </div>
+          <ul class="flag-list">
+            <li>Banks never ask for OTPs over SMS or links</li>
+            <li>Urgency tactic: "blocked within 24 hours" creates pressure</li>
+            <li>Suspicious URL — does not match SBI's official domain</li>
+            <li>Asks you to click a link and share sensitive information</li>
+          </ul>
+          <div class="safe-step">
+            Safe next step: Do not click the link or share any OTP. Call your bank directly using the number on your debit card or passbook. Report at cybercrime.gov.in
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Safety & Trust -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-eyebrow">Transparency</div>
+    <h2>What ScamShield does not do</h2>
+    <p>Trust starts with honesty about what a tool can and cannot do.</p>
+    <div class="trust-grid">
+      <div class="trust-item">Does not guarantee scam detection — no tool can catch everything</div>
+      <div class="trust-item">Does not connect to your bank or access your accounts</div>
+      <div class="trust-item">Does not block transactions or intercept calls</div>
+      <div class="trust-item">Does not store your personal financial information</div>
+      <div class="trust-item">Does not replace official channels — always verify with your bank</div>
+      <div class="trust-item">Does not name specific individuals or companies as scammers</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Family Value -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Designed for two people</div>
+    <h2>For parents. And for their children.</h2>
+    <div class="family-grid">
+      <div class="family-card">
+        <span class="family-card-icon" role="img" aria-label="For elderly parents">&#x1F9D3;</span>
+        <h3>For elderly parents</h3>
+        <p>When a suspicious call or message arrives, you don't need to feel rushed. Describe what happened in your own words, and ScamShield will tell you — in simple language — whether something looks risky and what to do next.</p>
+      </div>
+      <div class="family-card">
+        <span class="family-card-icon" role="img" aria-label="For adult children">&#x1F46A;</span>
+        <h3>For adult children</h3>
+        <p>You can't always be there when a scam call comes. ScamShield gives your parents a way to pause and check before acting — so you worry a little less about the calls you can't intercept.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. CTA -->
+<section class="final-cta" id="cta">
+  <div class="wrap">
+    <h2>Give your family a reason to pause before they act</h2>
+    <p>ScamShield is currently in early access. Join the list and we'll let you know when it's ready to try.</p>
+    <a href="mailto:scamshield@example.com?subject=Early%20Access%20Request" class="cta-btn">Request early access</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    ScamShield is an educational safety tool, not a financial service. Always verify suspicious activity with your bank directly or report at <a href="https://cybercrime.gov.in">cybercrime.gov.in</a>.
+  </div>
+</footer>
+
+</body>
+</html>
