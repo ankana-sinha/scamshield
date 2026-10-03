@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ScamShield — Financial Safety for Your Family</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 4 6.5v8.2c0 7.4 5.1 13.4 12 15.3 6.9-1.9 12-7.9 12-15.3V6.5z' fill='%231a6b4e'/%3E%3Cpath d='m10.5 16 4 4 7-8' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
@@ -570,8 +571,94 @@ footer a:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .btn-spinner { animation-duration: 2s; }
   .cta-btn:hover { transform: none; }
 }
+
+/* Live checker: in-button loader + result/error states */
+.checker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 260px;
+  cursor: pointer;
+}
+.checker-btn:disabled {
+  cursor: wait;
+  opacity: 0.85;
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+.checker-btn:disabled:hover { background: var(--accent); }
+.btn-spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.35);
+  border-top-color: var(--surface);
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+.checker-btn.is-loading .btn-spinner { display: inline-block; }
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+.checker-result {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid #d9e1dc;
+}
+.checker-result[hidden] { display: none; }
+.checker-md { line-height: 1.7; }
+.checker-md > * + * { margin-top: 14px; }
+.checker-md ul { padding-left: 1.4em; }
+.checker-md li + li { margin-top: 6px; }
+.checker-md strong { font-weight: 600; color: var(--ink); }
+.checker-md p + ul { margin-top: 4px; }
+.checker-md-heading { font-weight: 600; }
+.checker-result.is-error {
+  background: var(--alert-bg);
+  border-color: #f0cfcb;
+}
+.checker-result.is-notice {
+  background: var(--surface-alt);
+  border-color: var(--border);
+}
+.checker-error-title {
+  font-weight: 600;
+  color: var(--alert);
+  font-size: 1.05rem;
+}
+.checker-error-text {
+  margin-top: 8px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+.checker-error-safety {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+}
+.checker-retry-btn {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.checker-retry-btn:hover { background: var(--accent-subtle); }
 
 /* Focus states for accessibility */
 a:focus-visible, button:focus-visible {
@@ -756,29 +843,21 @@ a:focus-visible, button:focus-visible {
       <textarea
         id="scam-input"
         placeholder="Paste the suspicious message here..."
+        aria-label="Suspicious message"
         style="width:100%;min-height:170px;padding:18px;border:1px solid #d9e1dc;border-radius:12px;font:inherit;resize:vertical;box-sizing:border-box;"
       ></textarea>
 
       <button
         id="scam-check-btn"
-        class="cta-btn"
+        class="cta-btn checker-btn"
         type="button"
-        style="margin-top:14px;border:0;cursor:pointer;"
+        style="margin-top:14px;border:0;"
       >
-        Check with ScamShield
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Check with ScamShield</span>
       </button>
 
-      <div
-        id="scam-loading"
-        style="display:none;margin-top:20px;padding:16px;border-radius:10px;background:#f1f7f3;"
-      >
-        ScamShield is checking the message...
-      </div>
-
-      <div
-        id="scam-result"
-        style="display:none;margin-top:20px;padding:22px;border-radius:12px;background:#ffffff;border:1px solid #d9e1dc;"
-      ></div>
+      <div id="scam-result" class="checker-result" role="status" aria-live="polite" hidden></div>
     </div>
   </div>
 </section>
@@ -787,60 +866,170 @@ a:focus-visible, button:focus-visible {
 (function () {
   const input = document.getElementById("scam-input");
   const button = document.getElementById("scam-check-btn");
-  const loading = document.getElementById("scam-loading");
+  const buttonLabel = button.querySelector(".btn-label");
   const result = document.getElementById("scam-result");
 
-  button.addEventListener("click", async function () {
+  const IDLE_LABEL = "Check with ScamShield";
+  const LOADING_LABEL = "Checking message…";
+  const SLOW_LABEL = "Still checking, please wait…";
+  const SLOW_AFTER_MS = 8000;
+  const TIMEOUT_MS = 60000;
+
+  const SAFETY_TIP =
+    "Until you know it's safe, don't share any OTP, PIN, password or CVV, and don't send money.";
+
+  let slowTimer = null;
+
+  button.addEventListener("click", runCheck);
+
+  async function runCheck() {
     const message = input.value.trim();
 
     if (!message) {
-      result.style.display = "block";
-      result.innerHTML =
-        "<strong>Please paste the message first.</strong>";
+      showNotice("Please paste the message first.");
+      input.focus();
       return;
     }
 
-    button.disabled = true;
-    button.style.opacity = "0.6";
-    loading.style.display = "block";
-    result.style.display = "none";
+    setLoading(true);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
-      const response = await fetch("/api/check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong.");
+      let response;
+      try {
+        response = await fetch("/api/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+          signal: controller.signal
+        });
+      } catch (networkError) {
+        console.error(networkError);
+        if (networkError.name === "AbortError") {
+          return showError({
+            title: "This is taking too long.",
+            text: "ScamShield didn't respond in time. Please try again."
+          });
+        }
+        return showError({
+          title: "Couldn't connect to ScamShield.",
+          text: "Please check your internet connection and try again."
+        });
       }
 
-      result.style.display = "block";
-      result.innerHTML = `
-        <div style="white-space:pre-wrap;line-height:1.7;">
-          ${escapeHtml(data.result)}
-        </div>
-      `;
-    } catch (error) {
-      result.style.display = "block";
-      result.innerHTML = `
-        <strong>ScamShield couldn't complete the check.</strong>
-        <p style="margin-top:8px;">
-          Please try again in a moment.
-        </p>
-      `;
-      console.error(error);
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        console.error("Check failed:", response.status, data);
+
+        if (response.status === 400) {
+          return showNotice(data.error || "Please check the message and try again.");
+        }
+        if (response.status === 503 || response.status === 429) {
+          return showError({
+            title: "ScamShield is busy right now.",
+            text: "Many people are checking messages at the moment. Please wait a few seconds and try again."
+          });
+        }
+        return showError({
+          title: "ScamShield couldn't complete the check.",
+          text: "Something went wrong on our side. Please try again in a moment."
+        });
+      }
+
+      showResult(data.result);
     } finally {
-      button.disabled = false;
-      button.style.opacity = "1";
-      loading.style.display = "none";
+      clearTimeout(timeout);
+      setLoading(false);
     }
-  });
+  }
+
+  function setLoading(isLoading) {
+    clearTimeout(slowTimer);
+    button.disabled = isLoading;
+    button.classList.toggle("is-loading", isLoading);
+    button.setAttribute("aria-busy", String(isLoading));
+    buttonLabel.textContent = isLoading ? LOADING_LABEL : IDLE_LABEL;
+
+    if (isLoading) {
+      result.hidden = true;
+      // Retries/fallbacks on the server can take a while; reassure the user.
+      slowTimer = setTimeout(() => {
+        buttonLabel.textContent = SLOW_LABEL;
+      }, SLOW_AFTER_MS);
+    }
+  }
+
+  function showResult(text) {
+    result.className = "checker-result";
+    result.innerHTML = `<div class="checker-md">${renderMarkdown(text || "Unable to analyze this message.")}</div>`;
+    result.hidden = false;
+  }
+
+  // Minimal markdown for model output: headings, bullet lists, paragraphs, **bold**.
+  // Everything is HTML-escaped first, so only these tags can ever be produced.
+  function renderMarkdown(text) {
+    const inline = (s) => escapeHtml(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    const html = [];
+    let list = null;
+    let para = [];
+
+    const flushPara = () => {
+      if (para.length) html.push(`<p>${para.map(inline).join("<br>")}</p>`);
+      para = [];
+    };
+    const flushList = () => {
+      if (list) html.push(`<ul>${list.map((item) => `<li>${inline(item)}</li>`).join("")}</ul>`);
+      list = null;
+    };
+
+    for (const raw of text.replace(/\r\n?/g, "\n").split("\n")) {
+      const line = raw.trim();
+      const bullet = line.match(/^(?:[*\-•]|\d+[.)])\s+(.*)$/);
+      const heading = line.match(/^#{1,6}\s+(.*)$/);
+
+      if (!line) {
+        flushPara();
+        flushList();
+      } else if (bullet) {
+        flushPara();
+        (list ||= []).push(bullet[1]);
+      } else if (heading) {
+        flushPara();
+        flushList();
+        html.push(`<p class="checker-md-heading">${inline(heading[1])}</p>`);
+      } else {
+        flushList();
+        para.push(line);
+      }
+    }
+    flushPara();
+    flushList();
+    return html.join("");
+  }
+
+  function showNotice(text) {
+    result.className = "checker-result is-notice";
+    result.innerHTML = `<strong>${escapeHtml(text)}</strong>`;
+    result.hidden = false;
+  }
+
+  function showError({ title, text }) {
+    result.className = "checker-result is-error";
+    result.innerHTML = `
+      <div class="checker-error-title">${escapeHtml(title)}</div>
+      <p class="checker-error-text">${escapeHtml(text)}</p>
+      <p class="checker-error-safety">${escapeHtml(SAFETY_TIP)}</p>
+      <button type="button" class="checker-retry-btn">&#x21bb; Try again</button>
+    `;
+    result.hidden = false;
+
+    const retry = result.querySelector(".checker-retry-btn");
+    retry.addEventListener("click", runCheck);
+    retry.focus();
+  }
 
   function escapeHtml(text) {
     const div = document.createElement("div");
