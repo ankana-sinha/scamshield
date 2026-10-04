@@ -12,8 +12,16 @@ create table if not exists public.checks (
   model           text,
   error           text,
   upstream_status integer,
-  latency_ms      integer
+  latency_ms      integer,
+  prompt_tokens     integer,               -- token usage reported by Gemini
+  completion_tokens integer,
+  total_tokens      integer
 );
+
+-- For tables created before token usage was logged.
+alter table public.checks add column if not exists prompt_tokens integer;
+alter table public.checks add column if not exists completion_tokens integer;
+alter table public.checks add column if not exists total_tokens integer;
 
 -- Keeps the "checks processed" count (status = 'ok') fast as the table grows.
 create index if not exists checks_ok_idx on public.checks (id) where status = 'ok';
