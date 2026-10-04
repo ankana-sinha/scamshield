@@ -145,7 +145,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ── Hero ── */
 .hero {
-  padding: 88px 0 96px;
+  padding: 56px 0 80px;
   background: linear-gradient(180deg, var(--surface-warm) 0%, var(--surface) 100%);
 }
 
@@ -174,15 +174,8 @@ h1 .hero-highlight {
   font-size: 1.2rem;
   line-height: 1.65;
   color: var(--ink-mid);
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   max-width: 600px;
-}
-
-.hero-cta-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 56px;
 }
 
 .cta-btn {
@@ -207,12 +200,8 @@ h1 .hero-highlight {
   transform: translateY(0);
 }
 
-.cta-note {
-  font-size: 0.85rem;
-  color: var(--ink-light);
-}
-
 .hero-scenario {
+  margin-top: 40px;
   border-left: 3px solid var(--alert);
   padding: 24px 28px;
   background: var(--alert-bg);
@@ -536,12 +525,8 @@ footer a:hover { text-decoration: underline; }
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  .stat-block {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-  .stat-unit { display: inline; margin-top: 0; margin-left: 4px; }
+  .stat-number { white-space: nowrap; }
+  .stat-unit { margin-top: 8px; }
   .trust-grid { grid-template-columns: 1fr; }
 }
 
@@ -551,10 +536,13 @@ footer a:hover { text-decoration: underline; }
   section { padding: 72px 0; }
   h1 { font-size: 2.1rem; }
   h2 { font-size: 1.6rem; }
-  .hero { padding: 64px 0 72px; }
-  .hero-sub { font-size: 1.05rem; }
-  .hero-cta-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .hero { padding: 36px 0 56px; }
+  .hero-sub { font-size: 1.05rem; margin-bottom: 24px; }
+  .checker-card { padding: 18px 16px; margin: 0 -4px; }
+  .checker-input { min-height: 140px; font-size: 1rem; padding: 14px; }
+  .checker-meta { gap: 8px 16px; font-size: 0.82rem; }
   .cta-btn { padding: 16px 32px; font-size: 1rem; width: 100%; text-align: center; }
+  .checker-btn { min-width: 0; }
   .hero-scenario { padding: 20px 22px; }
   .hero-scenario p { font-size: 1rem; }
   .stat-number { font-size: 2.6rem; }
@@ -575,21 +563,124 @@ footer a:hover { text-decoration: underline; }
   .cta-btn:hover { transform: none; }
 }
 
-/* Live checker: messages-checked counter */
-.checker-count {
-  display: inline-flex;
+/* Live checker: input card */
+.checker-card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+}
+.checker-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.checker-input {
+  display: block;
+  width: 100%;
+  min-height: 160px;
+  padding: 16px 18px;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--surface-warm);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.checker-input::placeholder { color: var(--ink-light); opacity: 0.8; }
+.checker-input:focus {
+  outline: none;
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-light);
+}
+.checker-hint {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-light);
+}
+.example-row {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
+  margin: 18px 0 20px;
+}
+.example-label {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  margin-right: 2px;
+}
+.example-chip {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-mid);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.example-chip:hover {
+  color: var(--accent);
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+}
+
+/* Live checker: reassurance row + messages-checked counter */
+.checker-meta {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+  margin-top: 22px;
+  font-size: 0.88rem;
+  color: var(--ink-mid);
+}
+.checker-meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.checker-meta li::before {
+  content: '\2713';
+  font-weight: 700;
+  color: var(--accent);
+}
+.checker-meta .checker-count {
+  padding: 4px 12px;
   border-radius: 999px;
   background: var(--accent-light);
   color: var(--accent);
-  font-size: 0.95rem;
   font-weight: 600;
 }
+.checker-meta .checker-count::before { content: none; }
 .checker-count[hidden] { display: none; }
 .checker-count strong { font-variant-numeric: tabular-nums; }
+
+/* "Try this message" link under the demo card */
+.demo-try-btn {
+  display: block;
+  margin: 20px auto 0;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+}
+.demo-try-btn:hover { text-decoration: underline; }
 
 /* Live checker: in-button loader + result/error states */
 .checker-btn {
@@ -598,6 +689,7 @@ footer a:hover { text-decoration: underline; }
   justify-content: center;
   gap: 12px;
   min-width: 260px;
+  border: 0;
   cursor: pointer;
 }
 .checker-btn:disabled {
@@ -677,6 +769,8 @@ footer a:hover { text-decoration: underline; }
 .checker-retry-btn:hover { background: var(--accent-subtle); }
 
 /* Focus states for accessibility */
+#checker { scroll-margin-top: 72px; }
+
 a:focus-visible, button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -690,32 +784,55 @@ a:focus-visible, button:focus-visible {
 <nav>
   <div class="wrap">
     <a href="#" class="logo">Scam<span>Shield</span></a>
-    <a href="#cta" class="nav-cta">Get early access</a>
+    <a href="#checker" class="nav-cta" data-focus-checker>Check a message</a>
   </div>
 </nav>
 
-<!-- 1. Hero -->
-<section class="hero">
+<!-- 1. Hero + Live Checker -->
+<section class="hero" id="checker">
   <div class="wrap">
     <div class="hero-tagline">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2 14.5h12L8 1.5z" stroke="#1a6b4e" stroke-width="1.5" fill="#e6f4ed"/><line x1="8" y1="6" x2="8" y2="9.5" stroke="#1a6b4e" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.8" fill="#1a6b4e"/></svg>
-      AI-powered financial safety for families
+      Free AI scam checker for families
     </div>
-    <h1>Help your parents <span class="hero-highlight">pause before they act</span> on a scam</h1>
+    <h1>Got a suspicious message? <span class="hero-highlight">Check it before you act.</span></h1>
     <p class="hero-sub">
-      ScamShield is an AI assistant that helps elderly Indians assess suspicious calls, messages, and payment requests — in simple language — before they share information or make a payment.
+      Paste any SMS, WhatsApp message, email, or payment request. ScamShield explains the warning signs in simple language and tells you what to do next.
     </p>
-    <div class="hero-cta-row">
-      <a href="#cta" class="cta-btn">Join the early access list</a>
-      <span class="cta-note">Free to try. No bank access required.</span>
+
+    <div class="checker-card">
+      <label for="scam-input" class="checker-label">Paste the message here</label>
+      <textarea
+        id="scam-input"
+        class="checker-input"
+        maxlength="4000"
+        placeholder="e.g. Dear Customer, your KYC has expired. Click this link to update…"
+      ></textarea>
+      <p class="checker-hint">Don't include OTPs, PINs or passwords. ScamShield never needs them.</p>
+
+      <div class="example-row">
+        <span class="example-label">Or try an example:</span>
+        <button type="button" class="example-chip" data-example="kyc">Fake KYC SMS</button>
+        <button type="button" class="example-chip" data-example="upi">UPI refund request</button>
+        <button type="button" class="example-chip" data-example="prize">Lottery prize</button>
+      </div>
+
+      <button id="scam-check-btn" class="cta-btn checker-btn" type="button">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Check with ScamShield</span>
+      </button>
+
+      <div id="scam-result" class="checker-result" role="status" aria-live="polite" hidden></div>
     </div>
 
-    <div class="hero-scenario">
-      <p>
-        Your bank calls. Your KYC is "about to expire." They ask you to share an OTP. You're not sure if it's real. But in those few seconds, <strong>you feel pressured to act.</strong>
-      </p>
-      <div class="scenario-caption">This is the moment ScamShield is built for.</div>
-    </div>
+    <ul class="checker-meta">
+      <li>Free to use</li>
+      <li>No sign-up</li>
+      <li>No bank access</li>
+      <li id="checks-count" class="checker-count" aria-live="polite" hidden>
+        <strong id="checks-count-value"></strong> messages checked
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -733,6 +850,12 @@ a:focus-visible, button:focus-visible {
         <p>Elderly citizens are disproportionately targeted. Scammers use urgency, authority, and fear — a fake bank call, a threatening SMS, a convincing WhatsApp forward — to pressure people into acting before they can think.</p>
         <p>The problem isn't that people don't know about scams. It's that scams are designed to bypass careful thinking entirely.</p>
       </div>
+    </div>
+    <div class="hero-scenario">
+      <p>
+        Your bank calls. Your KYC is "about to expire." They ask you to share an OTP. You're not sure if it's real. But in those few seconds, <strong>you feel pressured to act.</strong>
+      </p>
+      <div class="scenario-caption">This is the moment ScamShield is built for.</div>
     </div>
   </div>
 </section>
@@ -839,50 +962,63 @@ a:focus-visible, button:focus-visible {
           </div>
         </div>
       </div>
+      <button type="button" class="demo-try-btn" data-example="kyc">Run this message through ScamShield &rarr;</button>
     </div>
   </div>
 </section>
 
-  <!-- ScamShield Live Checker -->
-<section class="alt" id="checker">
+<!-- 6. Safety & Trust -->
+<section class="alt">
   <div class="wrap">
-    <div class="section-eyebrow">Try ScamShield</div>
-
-    <h2>Not sure if a message is a scam?</h2>
-
-    <p>
-      Paste the suspicious SMS, WhatsApp message, email, or payment request below.
-      ScamShield will explain the warning signs in simple language and tell you what to do next.
-    </p>
-
-    <p id="checks-count" class="checker-count" aria-live="polite" hidden>
-      <span aria-hidden="true">&#x1F6E1;</span>
-      <span><strong id="checks-count-value"></strong> messages checked so far</span>
-    </p>
-
-    <div style="max-width:760px;margin:32px auto 0;">
-      <textarea
-        id="scam-input"
-        maxlength="4000"
-        placeholder="Paste the suspicious message here..."
-        aria-label="Suspicious message"
-        style="width:100%;min-height:170px;padding:18px;border:1px solid #d9e1dc;border-radius:12px;font:inherit;resize:vertical;box-sizing:border-box;"
-      ></textarea>
-
-      <button
-        id="scam-check-btn"
-        class="cta-btn checker-btn"
-        type="button"
-        style="margin-top:14px;border:0;"
-      >
-        <span class="btn-spinner" aria-hidden="true"></span>
-        <span class="btn-label">Check with ScamShield</span>
-      </button>
-
-      <div id="scam-result" class="checker-result" role="status" aria-live="polite" hidden></div>
+    <div class="section-eyebrow">Transparency</div>
+    <h2>What ScamShield does not do</h2>
+    <p>Trust starts with honesty about what a tool can and cannot do.</p>
+    <div class="trust-grid">
+      <div class="trust-item">Does not guarantee scam detection — no tool can catch everything</div>
+      <div class="trust-item">Does not connect to your bank or access your accounts</div>
+      <div class="trust-item">Does not block transactions or intercept calls</div>
+      <div class="trust-item">Does not store your personal financial information</div>
+      <div class="trust-item">Does not replace official channels — always verify with your bank</div>
+      <div class="trust-item">Does not name specific individuals or companies as scammers</div>
     </div>
   </div>
 </section>
+
+<!-- 7. Family Value -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Designed for two people</div>
+    <h2>For parents. And for their children.</h2>
+    <div class="family-grid">
+      <div class="family-card">
+        <span class="family-card-icon" role="img" aria-label="For elderly parents">&#x1F9D3;</span>
+        <h3>For elderly parents</h3>
+        <p>When a suspicious call or message arrives, you don't need to feel rushed. Describe what happened in your own words, and ScamShield will tell you — in simple language — whether something looks risky and what to do next.</p>
+      </div>
+      <div class="family-card">
+        <span class="family-card-icon" role="img" aria-label="For adult children">&#x1F46A;</span>
+        <h3>For adult children</h3>
+        <p>You can't always be there when a scam call comes. ScamShield gives your parents a way to pause and check before acting — so you worry a little less about the calls you can't intercept.</p>
+      </div>
+    </div>
+  </div>
+</section>
+  
+<!-- 8. CTA -->
+<section class="final-cta" id="cta">
+  <div class="wrap">
+    <h2>Give your family a reason to pause before they act</h2>
+    <p>Got a message you're unsure about? Check it now. It's free, takes a few seconds, and never needs your bank details.</p>
+    <a href="#checker" class="cta-btn" data-focus-checker>Check a message now</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    ScamShield is an educational safety tool, not a financial service. Always verify suspicious activity with your bank directly or report at <a href="https://cybercrime.gov.in">cybercrime.gov.in</a>.
+  </div>
+</footer>
 
 <script>
 (function () {
@@ -906,8 +1042,35 @@ a:focus-visible, button:focus-visible {
   const countValue = document.getElementById("checks-count-value");
   let checksProcessed = null;
 
+  const EXAMPLES = {
+    kyc: "Dear Customer, your SBI account KYC has expired. Your account will be blocked within 24 hours. Click here to update immediately: http://sbi-kyc-update.in/verify. Reply with OTP sent to your mobile.",
+    upi: "Hello sir, I am calling from Paytm refund department. Rs 4,999 was wrongly debited from your account. To get your refund, please accept the collect request we sent on UPI and enter your PIN to receive the money.",
+    prize: "CONGRATULATIONS! Your mobile number has won Rs 25,00,000 in the KBC Lucky Draw 2026. To claim your prize, pay a processing fee of Rs 9,500 to the account below and WhatsApp your Aadhaar copy to +91 98XXXXXX21."
+  };
+
   button.addEventListener("click", runCheck);
   loadCount();
+
+  // Example chips (in the hero and under the demo card) fill the box so people can try it instantly.
+  document.querySelectorAll("[data-example]").forEach((el) => {
+    el.addEventListener("click", () => {
+      input.value = EXAMPLES[el.dataset.example] || "";
+      focusChecker();
+    });
+  });
+
+  // "Check a message" links in the nav and final CTA jump to the box and focus it.
+  document.querySelectorAll("[data-focus-checker]").forEach((el) => {
+    el.addEventListener("click", (event) => {
+      event.preventDefault();
+      focusChecker();
+    });
+  });
+
+  function focusChecker() {
+    document.getElementById("checker").scrollIntoView({ behavior: "smooth", block: "start" });
+    input.focus({ preventScroll: true });
+  }
 
   // The counter is a nice-to-have: if it fails, it simply stays hidden.
   async function loadCount() {
@@ -1015,6 +1178,7 @@ a:focus-visible, button:focus-visible {
     result.className = "checker-result";
     result.innerHTML = `<div class="checker-md">${renderMarkdown(text || "Unable to analyze this message.")}</div>`;
     result.hidden = false;
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   // Minimal markdown for model output: headings, bullet lists, paragraphs, **bold**.
@@ -1087,59 +1251,6 @@ a:focus-visible, button:focus-visible {
   }
 })();
 </script>
-
-<!-- 6. Safety & Trust -->
-<section class="alt">
-  <div class="wrap">
-    <div class="section-eyebrow">Transparency</div>
-    <h2>What ScamShield does not do</h2>
-    <p>Trust starts with honesty about what a tool can and cannot do.</p>
-    <div class="trust-grid">
-      <div class="trust-item">Does not guarantee scam detection — no tool can catch everything</div>
-      <div class="trust-item">Does not connect to your bank or access your accounts</div>
-      <div class="trust-item">Does not block transactions or intercept calls</div>
-      <div class="trust-item">Does not store your personal financial information</div>
-      <div class="trust-item">Does not replace official channels — always verify with your bank</div>
-      <div class="trust-item">Does not name specific individuals or companies as scammers</div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. Family Value -->
-<section>
-  <div class="wrap">
-    <div class="section-eyebrow">Designed for two people</div>
-    <h2>For parents. And for their children.</h2>
-    <div class="family-grid">
-      <div class="family-card">
-        <span class="family-card-icon" role="img" aria-label="For elderly parents">&#x1F9D3;</span>
-        <h3>For elderly parents</h3>
-        <p>When a suspicious call or message arrives, you don't need to feel rushed. Describe what happened in your own words, and ScamShield will tell you — in simple language — whether something looks risky and what to do next.</p>
-      </div>
-      <div class="family-card">
-        <span class="family-card-icon" role="img" aria-label="For adult children">&#x1F46A;</span>
-        <h3>For adult children</h3>
-        <p>You can't always be there when a scam call comes. ScamShield gives your parents a way to pause and check before acting — so you worry a little less about the calls you can't intercept.</p>
-      </div>
-    </div>
-  </div>
-</section>
-  
-<!-- 8. CTA -->
-<section class="final-cta" id="cta">
-  <div class="wrap">
-    <h2>Give your family a reason to pause before they act</h2>
-    <p>ScamShield is currently in early access. Join the list and we'll let you know when it's ready to try.</p>
-    <a href="mailto:scamshield@example.com?subject=Early%20Access%20Request" class="cta-btn">Request early access</a>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer>
-  <div class="wrap">
-    ScamShield is an educational safety tool, not a financial service. Always verify suspicious activity with your bank directly or report at <a href="https://cybercrime.gov.in">cybercrime.gov.in</a>.
-  </div>
-</footer>
 
 </body>
 </html>
