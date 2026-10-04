@@ -19,7 +19,7 @@ const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
 
 const MAX_MESSAGE_CHARS = 4000;
 const MAX_RESULT_CHARS = 4000;
-const MAX_OUTPUT_TOKENS = 700;
+const MAX_OUTPUT_TOKENS = 500;
 
 // Best-effort per-IP limit. Serverless instances don't share memory, so this
 // stops bursts from one client rather than enforcing a global quota.
@@ -332,6 +332,7 @@ export default async function handler(req, res) {
     const { data, model } = await callWithFallback(message);
     const rawResult = data?.choices?.[0]?.message?.content ?? null;
     const { result, riskLevel } = enforceOutput(rawResult, flags);
+    const tokens = (value) => (Number.isFinite(value) ? value : null);
 
     await logCheck({
       status: "ok",
@@ -341,7 +342,10 @@ export default async function handler(req, res) {
       risk_level: riskLevel,
       red_flags: flags.map(({ severity, reason }) => ({ severity, reason })),
       model,
-      latency_ms: Date.now() - startedAt
+      latency_ms: Date.now() - startedAt,
+      prompt_tokens: tokens(data?.usage?.prompt_tokens),
+      completion_tokens: tokens(data?.usage?.completion_tokens),
+      total_tokens: tokens(data?.usage?.total_tokens)
     });
 
     return res.status(200).json({ result, riskLevel, model });
