@@ -575,6 +575,22 @@ footer a:hover { text-decoration: underline; }
   .cta-btn:hover { transform: none; }
 }
 
+/* Live checker: messages-checked counter */
+.checker-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.checker-count[hidden] { display: none; }
+.checker-count strong { font-variant-numeric: tabular-nums; }
+
 /* Live checker: in-button loader + result/error states */
 .checker-btn {
   display: inline-flex;
@@ -839,9 +855,15 @@ a:focus-visible, button:focus-visible {
       ScamShield will explain the warning signs in simple language and tell you what to do next.
     </p>
 
+    <p id="checks-count" class="checker-count" aria-live="polite" hidden>
+      <span aria-hidden="true">&#x1F6E1;</span>
+      <span><strong id="checks-count-value"></strong> messages checked so far</span>
+    </p>
+
     <div style="max-width:760px;margin:32px auto 0;">
       <textarea
         id="scam-input"
+        maxlength="4000"
         placeholder="Paste the suspicious message here..."
         aria-label="Suspicious message"
         style="width:100%;min-height:170px;padding:18px;border:1px solid #d9e1dc;border-radius:12px;font:inherit;resize:vertical;box-sizing:border-box;"
@@ -880,7 +902,30 @@ a:focus-visible, button:focus-visible {
 
   let slowTimer = null;
 
+  const countBox = document.getElementById("checks-count");
+  const countValue = document.getElementById("checks-count-value");
+  let checksProcessed = null;
+
   button.addEventListener("click", runCheck);
+  loadCount();
+
+  // The counter is a nice-to-have: if it fails, it simply stays hidden.
+  async function loadCount() {
+    try {
+      const response = await fetch("/api/stats");
+      if (!response.ok) return;
+      const data = await response.json();
+      if (Number.isFinite(data.checksProcessed)) showCount(data.checksProcessed);
+    } catch (error) {
+      console.error("Stats failed:", error);
+    }
+  }
+
+  function showCount(count) {
+    checksProcessed = count;
+    countValue.textContent = count.toLocaleString("en-IN");
+    countBox.hidden = count < 1;
+  }
 
   async function runCheck() {
     const message = input.value.trim();
@@ -927,7 +972,10 @@ a:focus-visible, button:focus-visible {
         if (response.status === 400) {
           return showNotice(data.error || "Please check the message and try again.");
         }
-        if (response.status === 503 || response.status === 429) {
+        if (response.status === 429) {
+          return showNotice(data.error || "Please wait a minute and try again.");
+        }
+        if (response.status === 503) {
           return showError({
             title: "ScamShield is busy right now.",
             text: "Many people are checking messages at the moment. Please wait a few seconds and try again."
@@ -940,6 +988,7 @@ a:focus-visible, button:focus-visible {
       }
 
       showResult(data.result);
+      if (checksProcessed !== null) showCount(checksProcessed + 1);
     } finally {
       clearTimeout(timeout);
       setLoading(false);
