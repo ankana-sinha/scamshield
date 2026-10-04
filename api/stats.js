@@ -1,8 +1,8 @@
 import { countCompletedChecks } from "./_lib/supabase.js";
 
-// Served from Vercel's CDN cache: fresh for 60s, then served stale while one
-// background request refreshes it, so page loads almost never wait on Supabase.
-const CACHE_CONTROL = "public, s-maxage=60, stale-while-revalidate=600";
+// Cached on Vercel's CDN for at most 10s, never served stale after that, so the
+// count is never more than 10s old while bursts still share one Supabase query.
+const CACHE_CONTROL = "public, s-maxage=10";
 
 export default async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "HEAD") {
